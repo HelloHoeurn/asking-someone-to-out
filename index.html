@@ -1,224 +1,538 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>តើអូនចង់ទៅញ៉ាំអី/ដើរលេងជាមួយបងទេ? ❤️</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Kantumruy Pro', 'Khmer OS Battambang', sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>will you?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #fbe9ef;
+    --blush-deep: #f6d6e2;
+    --card: #fffdfb;
+    --wine: #6e2439;
+    --wine-soft: #8a3b52;
+    --magenta: #c23768;
+    --magenta-deep: #a32955;
+    --lilac: #b9a2e0;
+    --lilac-deep: #9c82cc;
+    --ink: #3d2430;
+    --gold: #d8a84e;
+  }
 
-        body {
-            background-color: #ffe6e8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+  * { box-sizing: border-box; }
 
-        .card {
-            background: #ffffff;
-            padding: 30px 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.2);
-            text-align: center;
-            max-width: 420px;
-            width: 100%;
-            position: relative;
-        }
+  html, body {
+    margin: 0;
+    height: 100%;
+    font-family: 'Kantumruy Pro', 'Nunito Sans', sans-serif;
+    color: var(--ink);
+  }
 
-        h1 {
-            color: #ff4d6d;
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-        }
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 20% 15%, var(--blush-deep), var(--blush) 55%, #f3e6ee 100%);
+    overflow-x: hidden;
+    padding: 24px;
+  }
 
-        p {
-            color: #555;
-            font-size: 1rem;
-            margin-bottom: 20px;
-        }
+  .stage {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+  }
 
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-            text-align: left;
-        }
+  .petal {
+    position: fixed;
+    top: -40px;
+    font-size: 18px;
+    opacity: 0.55;
+    animation: fall linear forwards;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-        .option-card {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            border: 2px solid #ffccd5;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
 
-        .option-card:hover {
-            border-color: #ff4d6d;
-            background-color: #fff0f3;
-        }
+  .card {
+    position: relative;
+    z-index: 1;
+    background: var(--card);
+    border-radius: 28px;
+    padding: 44px 34px 34px;
+    box-shadow: 0 20px 60px rgba(110, 36, 57, 0.18), 0 2px 8px rgba(110, 36, 57, 0.08);
+    text-align: center;
+    display: none;
+    animation: rise 0.5s cubic-bezier(.2,.8,.2,1) forwards;
+  }
 
-        .option-card input {
-            margin-right: 12px;
-            accent-color: #ff4d6d;
-            transform: scale(1.2);
-        }
+  .card.active { display: block; }
 
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-            min-height: 50px;
-        }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
 
-        button {
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--wine-soft);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
 
-        .btn-yes {
-            background-color: #ff4d6d;
-            color: white;
-            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.4);
-        }
+  h1 {
+    font-family: 'Kantumruy Pro', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.35;
+    color: var(--wine);
+    margin: 0 0 8px;
+  }
 
-        .btn-yes:hover {
-            background-color: #ff2a54;
-            transform: scale(1.05);
-        }
+  p.sub {
+    font-size: 14.5px;
+    color: var(--wine-soft);
+    margin: 0 0 28px;
+    line-height: 1.5;
+  }
 
-        .btn-no {
-            background-color: #cccccc;
-            color: #333;
-            position: absolute;
-        }
+  .btn-row {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    min-height: 56px;
+  }
 
-        .success-message {
-            display: none;
-            color: #ff4d6d;
-            font-size: 1.3rem;
-            font-weight: bold;
-            animation: fadeIn 0.5s ease-in-out;
-        }
+  button {
+    font-family: 'Kantumruy Pro', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    border: none;
+    border-radius: 999px;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-    </style>
+  button:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  .btn-yes {
+    background: linear-gradient(135deg, var(--magenta), var(--magenta-deep));
+    color: white;
+    box-shadow: 0 10px 24px rgba(163, 41, 85, 0.35);
+  }
+  .btn-yes:hover { transform: translateY(-2px) scale(1.03); }
+
+  .btn-no {
+    position: absolute;
+    background: linear-gradient(135deg, var(--lilac), var(--lilac-deep));
+    color: white;
+    box-shadow: 0 8px 18px rgba(156, 130, 204, 0.35);
+    transition: left 0.18s ease, top 0.18s ease, transform 0.15s ease;
+  }
+
+  .dodge-note {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--wine-soft);
+    opacity: 0.9;
+    font-style: italic;
+    min-height: 16px;
+  }
+
+  label.field-label {
+    display: block;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--wine-soft);
+    letter-spacing: 0.02em;
+    margin: 18px 0 6px;
+  }
+
+  input[type="date"], select {
+    width: 100%;
+    font-family: 'Kantumruy Pro', sans-serif;
+    font-size: 14.5px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1.5px solid var(--blush-deep);
+    background: #fffaf9;
+    color: var(--ink);
+  }
+
+  input[type="date"]:focus, select:focus {
+    outline: none;
+    border-color: var(--magenta);
+  }
+
+  .vibe-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 6px 0 6px;
+  }
+
+  .vibe {
+    border: 1.5px solid var(--blush-deep);
+    background: #fffaf9;
+    border-radius: 14px;
+    padding: 14px 6px 10px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--wine-soft);
+    transition: all 0.15s ease;
+  }
+  .vibe .emoji { display: block; font-size: 24px; margin-bottom: 6px; }
+  .vibe:hover { border-color: var(--lilac-deep); transform: translateY(-2px); }
+  .vibe.selected {
+    border-color: var(--magenta);
+    background: linear-gradient(135deg, #fdeaf1, #fbe3ee);
+    color: var(--magenta-deep);
+    box-shadow: 0 6px 14px rgba(194, 55, 104, 0.18);
+  }
+
+  .primary-wide {
+    width: 100%;
+    margin-top: 20px;
+    background: linear-gradient(135deg, var(--magenta), var(--magenta-deep));
+    color: white;
+    box-shadow: 0 10px 24px rgba(163, 41, 85, 0.3);
+  }
+  .primary-wide:hover { transform: translateY(-2px); }
+  .primary-wide:disabled {
+    background: #e7d3dc;
+    color: #a98d9a;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .ghost {
+    background: none;
+    color: var(--wine-soft);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 8px;
+    margin-top: 10px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ghost:hover { color: var(--magenta-deep); }
+
+  .fee-icon {
+    font-size: 30px;
+    margin-bottom: 6px;
+  }
+
+  .fee-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1.5px solid var(--blush-deep);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin: 20px 0 4px;
+    text-align: left;
+  }
+  .fee-box .fee-label { font-weight: 700; color: var(--wine); font-size: 14.5px; }
+  .fee-box .fee-note { font-size: 11.5px; color: var(--wine-soft); margin-top: 3px; }
+  .fee-box .fee-amount { font-family: 'Nunito Sans', sans-serif; font-size: 22px; color: var(--magenta-deep); font-weight: 800; }
+
+  .stamp {
+    display: inline-block;
+    font-size: 11.5px;
+    color: var(--wine-soft);
+    opacity: 0.65;
+    margin-top: 26px;
+    letter-spacing: 0.02em;
+  }
+
+  .confetti {
+    position: fixed;
+    top: -20px;
+    z-index: 5;
+    animation: confetti-fall linear forwards;
+    pointer-events: none;
+  }
+  @keyframes confetti-fall {
+    to { transform: translateY(105vh) rotate(540deg); opacity: 0.9; }
+  }
+
+  .heart-loader {
+    font-size: 40px;
+    animation: pulse 0.6s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.18); }
+  }
+
+  .summary-line {
+    background: #fff5f8;
+    border: 1px dashed var(--blush-deep);
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--wine-soft);
+    text-align: left;
+    margin: 18px 0 4px;
+    line-height: 1.7;
+  }
+  .summary-line b { color: var(--wine); }
+
+  @media (max-width: 400px) {
+    .card { padding: 36px 22px 28px; }
+    h1 { font-size: 23px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .petal, .confetti, .heart-loader { animation: none; }
+    .card { animation: none; }
+  }
+</style>
 </head>
 <body>
 
-    <div class="card">
-        <div id="quiz-container">
-            <h1>តើចុងសប្តាហ៍នេះចង់ទៅណានឹងបង? 💖</h1>
-            <p>សូមជ្រើសរើសសកម្មភាពដែលអូនចូលចិត្ត៖</p>
+<div class="stage">
 
-            <div class="options">
-                <label class="option-card">
-                    <input type="radio" name="activity" value="មើលកុន (Movie Date)" checked>
-                    <span>🎬 មើលកុន (Movie Date)</span>
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="activity" value="មើលថ្ងៃលិច (Sunset Date)">
-                    <span>🌅 មើលថ្ងៃលិច (Sunset Date)</span>
-                </label>
-            </div>
+  <!-- STEP 1: The ask -->
+  <div class="card active" id="step-ask">
+    <div class="eyebrow">POV: ចែចូវក្មេង IT 🧑‍💻</div>
+    <h1>តើអ្នកព្រមទៅញ៉ាំអី<br>ជាមួយខ្ញុំទេ? 🌸</h1>
+    <p class="sub">គិតមើលសិនបានណា! (ប៉ុន្តែមានជម្រើសតែមួយគត់ 😜)</p>
+    <div class="btn-row" id="btnRow">
+      <button class="btn-yes" onclick="goTo('step-day')">ព្រម ♥</button>
+      <button class="btn-no" id="noBtn">អត់ទេ 🐾</button>
+    </div>
+    <div class="dodge-note" id="dodgeNote">&nbsp;</div>
+  </div>
 
-            <div class="btn-group" id="button-area">
-                <button class="btn-yes" id="yesBtn">យល់ព្រម! 🥰</button>
-                <button class="btn-no" id="noBtn">អត់ទេ 😜</button>
-            </div>
-        </div>
+  <!-- STEP 2: Pick a day -->
+  <div class="card" id="step-day">
+    <div class="eyebrow">ជំហានទី ២ នៃ ៤</div>
+    <h1>ចុះតើទំនេរ<br>នៅថ្ងៃណាដែរ? 📅</h1>
+    <p class="sub">ជ្រើសរើសថ្ងៃដែលសមស្រប — ខ្ញុំបានលុបការងារចោលអស់ហើយ!</p>
 
-        <div class="success-message" id="successMessage">
-            <h2>អរគុណច្រើនអូនសំឡាញ់! 🎉</h2>
-            <p style="margin-top: 10px;">បងបានទទួលចម្លើយហើយ ចាំជួបគ្នានៅថ្ងៃណាត់ជួប! ❤️</p>
-        </div>
+    <label class="field-label" for="dateInput">ជ្រើសរើសថ្ងៃ</label>
+    <input type="date" id="dateInput">
+
+    <label class="field-label" for="timeSelect">ជ្រើសរើសពេលវេលា / សកម្មភាព</label>
+    <select id="timeSelect">
+      <option value="">ជ្រើសរើសពេលវេលា</option>
+      <option>កាហ្វេពេលព្រឹក ☕</option>
+      <option>បាយថ្ងៃត្រង់ 🥪</option>
+      <option>មើលថ្ងៃលិច Romantic 🌅</option>
+      <option>អាហារពេលល្ងាច 🍽️</option>
+      <option>មើលកុន 🎬</option>
+      <option>ដើរលេងពេលយប់ 🌙</option>
+    </select>
+
+    <button class="primary-wide" id="dayNext" disabled onclick="goTo('step-vibe')">បន្ត៖ ជ្រើសរើសមុខម្ហូប →</button>
+  </div>
+
+  <!-- STEP 3: Vibe / food -->
+  <div class="card" id="step-vibe">
+    <div class="eyebrow">ជំហានទី ៣ នៃ ៤</div>
+    <h1>តើចង់ញ៉ាំអី<br>ដែរ? 🍴✨</h1>
+    <p class="sub">ជ្រើសរើសម្ហូបដែលចូលចិត្ត</p>
+
+    <div class="vibe-grid" id="vibeGrid">
+      <div class="vibe" data-v="ភីហ្សា (Pizza)"><span class="emoji">🍕</span>ភីហ្សា</div>
+      <div class="vibe" data-v="ស៊ូស៊ី (Sushi)"><span class="emoji">🍣</span>ស៊ូស៊ី</div>
+      <div class="vibe" data-v="ប៊ឺហ្គឺ (Burgers)"><span class="emoji">🍔</span>ប៊ឺហ្គឺ</div>
+      <div class="vibe" data-v="ប៉ាស្តា (Pasta)"><span class="emoji">🍝</span>ប៉ាស្តា</div>
+      <div class="vibe" data-v="តាខូស (Tacos)"><span class="emoji">🌮</span>តាខូស</div>
+      <div class="vibe" data-v="រ៉ាម៉េន (Ramen)"><span class="emoji">🍜</span>រ៉ាម៉េន</div>
     </div>
 
-    <script>
-        // ==========================================
-        // 1. TELEGRAM BOT CONFIGURATION
-        // ==========================================
-        const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';
-        const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID_HERE';
+    <button class="primary-wide" id="vibeNext" disabled onclick="renderSummaryAndGo()">បន្ត៖ បញ្ជាក់ការណាត់ជួប →</button>
+  </div>
 
-        async function sendTelegramNotification(activityChoice) {
-            const message = `💖 **Date Proposal Accepted!** 💖\n\nChosen Activity: **${activityChoice}**`;
-            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  <!-- STEP 4: The "fee" bit -->
+  <div class="card" id="step-fee">
+    <div class="fee-icon">💳</div>
+    <h1>បង់ថ្លៃសេវាបន្តិច</h1>
+    <p class="sub">ដើម្បីបញ្ជាក់ការណាត់ជួប សូមបំពេញប្រតិបត្តិការខាងក្រោម។ ជារឿងធម្មតាទេ អ្នកណាក៏ធ្វើចេះដែរ!</p>
 
-            try {
-                await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text: message,
-                        parse_mode: 'Markdown'
-                    })
-                });
-            } catch (error) {
-                console.error("Error sending message to Telegram:", error);
-            }
-        }
+    <div class="fee-box">
+      <div>
+        <div class="fee-label">កិច្ចព្រមព្រៀងណាត់ជួប™</div>
+        <div class="fee-note">បង់តែម្តងគត់ • មិនអាចដកប្រាក់វិញបាន • ពិតជាគួឱ្យតម្លៃណាស់</div>
+      </div>
+      <div class="fee-amount">$499</div>
+    </div>
 
-        // ==========================================
-        // 2. RUNAWAY "NO" BUTTON LOGIC
-        // ==========================================
-        const noBtn = document.getElementById('noBtn');
-        const container = document.getElementById('button-area');
+    <button class="primary-wide" onclick="startPayJoke()">បង់ប្រាក់ $499 &amp; បញ្ជាក់ 💸</button>
+    <button class="ghost" onclick="goTo('step-vibe')">ត្រឡប់ក្រោយ</button>
+  </div>
 
-        function moveNoButton() {
-            const containerRect = container.getBoundingClientRect();
-            const btnRect = noBtn.getBoundingClientRect();
+  <!-- STEP 5: fake "processing" -->
+  <div class="card" id="step-processing">
+    <div class="heart-loader">💗</div>
+    <h1 style="margin-top:14px;">កំពុងដំណើរការការបង់ប្រាក់…</h1>
+    <p class="sub">សូមកុំបិទផ្ទាំងនេះ ផ្ទាំងក្ដីស្រឡាញ់របស់អ្នកកំពុងត្រូវបានផ្ទៀងផ្ទាត់</p>
+  </div>
 
-            // Calculate max available movement area inside/around button group
-            const maxX = 150;
-            const maxY = 100;
+  <!-- STEP 6: the reveal / real confirmation -->
+  <div class="card" id="step-final">
+    <div class="eyebrow">ការសម្ដែងទេ!</div>
+    <h1>លេងសើចតើ! 😌<br>ជាការណាត់ជួបពិតប្រាកដ មិនបាច់ប្រាក់ទេ។</h1>
+    <p class="sub">ប្រាក់ $499 គ្រាន់តែជាការលេងសើចតាមអ៊ីនធឺណិតប៉ុណ្ណោះ។ នេះជាព័ត៌មានពិត៖</p>
+    <div class="summary-line" id="summaryBox"></div>
+    <div class="stamp">បង្កើតឡើងដោយ 🩷 · មិនមានការប្រមូលទិន្នន័យ · មិនមានការកាត់ប្រាក់</div>
+  </div>
 
-            const randomX = (Math.random() - 0.5) * maxX * 2;
-            const randomY = (Math.random() - 0.5) * maxY * 2;
+</div>
 
-            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
-        }
+<script>
+  const cards = document.querySelectorAll('.card');
+  function goTo(id) {
+    cards.forEach(c => c.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
 
-        noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('touchstart', moveNoButton); // Mobile support
+  // ---- Step 1: dodging "no" button ----
+  const noBtn = document.getElementById('noBtn');
+  const btnRow = document.getElementById('btnRow');
+  const dodgeNote = document.getElementById('dodgeNote');
+  const dodgeLines = [
+    "ខំប្រឹងល្អណាស់!",
+    "គ្មានផ្លូវទេ!",
+    "ប៊ូតុងថាទេ ប៉ុន្តែចក្រវាឡថាបាទ/ចាស!",
+    "ចុចមិនទាន់ទេ!",
+    "អូហូ! កំពុងតែលេងសើចមែនទេ? 🙂"
+  ];
+  let dodgeCount = 0;
 
-        // ==========================================
-        // 3. SUBMIT / YES BUTTON CLICK HANDLER
-        // ==========================================
-        const yesBtn = document.getElementById('yesBtn');
-        const quizContainer = document.getElementById('quiz-container');
-        const successMessage = document.getElementById('successMessage');
+  function placeNoButtonRandomly() {
+    const rowRect = btnRow.getBoundingClientRect();
+    const btnW = noBtn.offsetWidth || 90;
+    const btnH = noBtn.offsetHeight || 50;
+    const maxLeft = Math.max(rowRect.width - btnW, 0);
+    const left = Math.random() * maxLeft;
+    const top = (Math.random() * 40) - 5;
+    noBtn.style.left = left + 'px';
+    noBtn.style.top = top + 'px';
+  }
 
-        yesBtn.addEventListener('click', async () => {
-            const selectedOption = document.querySelector('input[name="activity"]:checked').value;
+  function dodge() {
+    dodgeCount++;
+    placeNoButtonRandomly();
+    dodgeNote.textContent = dodgeLines[Math.min(dodgeCount - 1, dodgeLines.length - 1)];
+  }
 
-            // Send notification to Telegram
-            await sendTelegramNotification(selectedOption);
+  noBtn.addEventListener('mouseenter', dodge);
+  noBtn.addEventListener('touchstart', function(e){ e.preventDefault(); dodge(); }, {passive:false});
+  noBtn.addEventListener('click', function(e){ e.preventDefault(); dodge(); });
 
-            // Switch to success view
-            quizContainer.style.display = 'none';
-            successMessage.style.display = 'block';
-        });
-    </script>
+  window.addEventListener('load', () => {
+    noBtn.style.position = 'absolute';
+    noBtn.style.left = '160px';
+    noBtn.style.top = '0px';
+  });
+
+  // ---- Step 2: date + time validation ----
+  const dateInput = document.getElementById('dateInput');
+  const timeSelect = document.getElementById('timeSelect');
+  const dayNext = document.getElementById('dayNext');
+
+  function checkDayReady() {
+    dayNext.disabled = !(dateInput.value && timeSelect.value);
+  }
+  dateInput.addEventListener('change', checkDayReady);
+  timeSelect.addEventListener('change', checkDayReady);
+
+  const today = new Date();
+  dateInput.min = today.toISOString().split('T')[0];
+
+  // ---- Step 3: vibe picker ----
+  const vibeGrid = document.getElementById('vibeGrid');
+  const vibeNext = document.getElementById('vibeNext');
+  let chosenVibe = null;
+
+  vibeGrid.addEventListener('click', (e) => {
+    const el = e.target.closest('.vibe');
+    if (!el) return;
+    vibeGrid.querySelectorAll('.vibe').forEach(v => v.classList.remove('selected'));
+    el.classList.add('selected');
+    chosenVibe = el.dataset.v;
+    vibeNext.disabled = false;
+  });
+
+  // ---- Summary ----
+  function formatDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('km-KH', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  function renderSummaryAndGo() {
+    const box = document.getElementById('summaryBox');
+    box.innerHTML =
+      '<b>ថ្ងៃ៖</b> ' + formatDate(dateInput.value) + '<br>' +
+      '<b>ពេល/សកម្មភាព៖</b> ' + (timeSelect.value || '—') + '<br>' +
+      '<b>អាហារ៖</b> ' + (chosenVibe || '—');
+    goTo('step-fee');
+  }
+
+  // ---- Fake payment -> confetti reveal ----
+  function startPayJoke() {
+    goTo('step-processing');
+    setTimeout(() => {
+      goTo('step-final');
+      launchConfetti();
+    }, 1400);
+  }
+
+  function launchConfetti() {
+    const colors = ['#c23768', '#b9a2e0', '#d8a84e', '#f6d6e2', '#6e2439'];
+    const shapes = ['🌸','💗','✨','🎀'];
+    for (let i = 0; i < 26; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti';
+      const useEmoji = Math.random() > 0.5;
+      if (useEmoji) {
+        el.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+        el.style.fontSize = (14 + Math.random() * 14) + 'px';
+      } else {
+        el.style.width = '8px';
+        el.style.height = '14px';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.borderRadius = '2px';
+      }
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (2.2 + Math.random() * 1.6) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+  }
+
+  // ---- ambient falling petals ----
+  function spawnPetal() {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = Math.random() > 0.5 ? '🌸' : '✿';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (6 + Math.random() * 6) + 's';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 13000);
+  }
+  setInterval(spawnPetal, 900);
+</script>
+
 </body>
 </html>
