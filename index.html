@@ -162,7 +162,7 @@
     margin: 18px 0 6px;
   }
 
-  input[type="date"], select {
+  input[type="date"], input[type="time"], select {
     width: 100%;
     font-family: 'Kantumruy Pro', sans-serif;
     font-size: 14.5px;
@@ -173,14 +173,14 @@
     color: var(--ink);
   }
 
-  input[type="date"]:focus, select:focus {
+  input[type="date"]:focus, input[type="time"]:focus, select:focus {
     outline: none;
     border-color: var(--magenta);
   }
 
   .vibe-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin: 6px 0 6px;
   }
@@ -189,14 +189,14 @@
     border: 1.5px solid var(--blush-deep);
     background: #fffaf9;
     border-radius: 14px;
-    padding: 14px 6px 10px;
+    padding: 12px 6px 10px;
     cursor: pointer;
     font-size: 12.5px;
     font-weight: 700;
     color: var(--wine-soft);
     transition: all 0.15s ease;
   }
-  .vibe .emoji { display: block; font-size: 24px; margin-bottom: 6px; }
+  .vibe .emoji { display: block; font-size: 22px; margin-bottom: 4px; }
   .vibe:hover { border-color: var(--lilac-deep); transform: translateY(-2px); }
   .vibe.selected {
     border-color: var(--magenta);
@@ -321,18 +321,21 @@
     <div class="dodge-note" id="dodgeNote">&nbsp;</div>
   </div>
 
-  <!-- STEP 2: Pick a day -->
+  <!-- STEP 2: Pick a day and time -->
   <div class="card" id="step-day">
     <div class="eyebrow">ជំហានទី ២ នៃ ៤</div>
     <h1>ចុះតើទំនេរ<br>នៅថ្ងៃណាដែរ? 📅</h1>
-    <p class="sub">ជ្រើសរើសថ្ងៃដែលសមស្រប — ខ្ញុំបានលុបការងារចោលអស់ហើយ!</p>
+    <p class="sub">ជ្រើសរើសថ្ងៃ និងម៉ោង — ខ្ញុំបានលុបការងារចោលអស់ហើយ!</p>
 
     <label class="field-label" for="dateInput">ជ្រើសរើសថ្ងៃ</label>
     <input type="date" id="dateInput">
 
-    <label class="field-label" for="timeSelect">ជ្រើសរើសពេលវេលា / សកម្មភាព</label>
+    <label class="field-label" for="timeInput">ជ្រើសរើសម៉ោង (Exact Time)</label>
+    <input type="time" id="timeInput">
+
+    <label class="field-label" for="timeSelect">ឬ ជ្រើសរើសសកម្មភាព</label>
     <select id="timeSelect">
-      <option value="">ជ្រើសរើសពេលវេលា</option>
+      <option value="">ជ្រើសរើសសកម្មភាព</option>
       <option>កាហ្វេពេលព្រឹក ☕</option>
       <option>បាយថ្ងៃត្រង់ 🥪</option>
       <option>មើលថ្ងៃលិច Romantic 🌅</option>
@@ -355,8 +358,8 @@
       <div class="vibe" data-v="ស៊ូស៊ី (Sushi)"><span class="emoji">🍣</span>ស៊ូស៊ី</div>
       <div class="vibe" data-v="ប៊ឺហ្គឺ (Burgers)"><span class="emoji">🍔</span>ប៊ឺហ្គឺ</div>
       <div class="vibe" data-v="ប៉ាស្តា (Pasta)"><span class="emoji">🍝</span>ប៉ាស្តា</div>
-      <div class="vibe" data-v="តាខូស (Tacos)"><span class="emoji">🌮</span>តាខូស</div>
-      <div class="vibe" data-v="រ៉ាម៉េន (Ramen)"><span class="emoji">🍜</span>រ៉ាម៉េន</div>
+      <div class="vibe" data-v="មី (Noodle)"><span class="emoji">🍜</span>មី</div>
+      <div class="vibe" data-v="មិនបាច់ទេ (No need)"><span class="emoji">🙅‍♀️</span>មិនបាច់ទេ</div>
     </div>
 
     <button class="primary-wide" id="vibeNext" disabled onclick="renderSummaryAndGo()">បន្ត៖ បញ្ជាក់ការណាត់ជួប →</button>
@@ -399,6 +402,43 @@
 </div>
 
 <script>
+  // ==========================================
+  // TELEGRAM BOT CONFIGURATION
+  // REPLACE THESE WITH YOUR BOT TOKEN & CHAT ID
+  // ==========================================
+  const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';
+  const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID_HERE';
+
+  async function sendTelegramNotification(dateVal, timeVal, activityVal, foodVal) {
+    if (TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE') {
+      console.warn("Telegram Bot Token not configured yet!");
+      return;
+    }
+
+    const message = `💖 **Date Proposal Accepted!** 💖\n\n` +
+                    `📅 **Date:** ${dateVal}\n` +
+                    `⏰ **Time:** ${timeVal}\n` +
+                    `🎈 **Activity:** ${activityVal}\n` +
+                    `🍜 **Food Choice:** ${foodVal}`;
+
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+    try {
+      await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'Markdown'
+        })
+      });
+    } catch (error) {
+      console.error("Error sending message to Telegram:", error);
+    }
+  }
+
+  // Navigation Logic
   const cards = document.querySelectorAll('.card');
   function goTo(id) {
     cards.forEach(c => c.classList.remove('active'));
@@ -421,7 +461,6 @@
   function placeNoButtonRandomly() {
     const rowRect = btnRow.getBoundingClientRect();
     const btnW = noBtn.offsetWidth || 90;
-    const btnH = noBtn.offsetHeight || 50;
     const maxLeft = Math.max(rowRect.width - btnW, 0);
     const left = Math.random() * maxLeft;
     const top = (Math.random() * 40) - 5;
@@ -447,13 +486,16 @@
 
   // ---- Step 2: date + time validation ----
   const dateInput = document.getElementById('dateInput');
+  const timeInput = document.getElementById('timeInput');
   const timeSelect = document.getElementById('timeSelect');
   const dayNext = document.getElementById('dayNext');
 
   function checkDayReady() {
-    dayNext.disabled = !(dateInput.value && timeSelect.value);
+    // Requires date and either explicit time OR activity selected
+    dayNext.disabled = !(dateInput.value && (timeInput.value || timeSelect.value));
   }
   dateInput.addEventListener('change', checkDayReady);
+  timeInput.addEventListener('change', checkDayReady);
   timeSelect.addEventListener('change', checkDayReady);
 
   const today = new Date();
@@ -482,16 +524,29 @@
 
   function renderSummaryAndGo() {
     const box = document.getElementById('summaryBox');
+    const displayTime = timeInput.value ? timeInput.value : '—';
+    const displayActivity = timeSelect.value || '—';
+
     box.innerHTML =
       '<b>ថ្ងៃ៖</b> ' + formatDate(dateInput.value) + '<br>' +
-      '<b>ពេល/សកម្មភាព៖</b> ' + (timeSelect.value || '—') + '<br>' +
+      '<b>ម៉ោង៖</b> ' + displayTime + '<br>' +
+      '<b>សកម្មភាព៖</b> ' + displayActivity + '<br>' +
       '<b>អាហារ៖</b> ' + (chosenVibe || '—');
     goTo('step-fee');
   }
 
-  // ---- Fake payment -> confetti reveal ----
-  function startPayJoke() {
+  // ---- Fake payment -> Telegram Notification -> Confetti reveal ----
+  async function startPayJoke() {
     goTo('step-processing');
+
+    // Trigger Telegram message in background
+    const formattedDate = formatDate(dateInput.value);
+    const timeVal = timeInput.value || 'Not specified';
+    const activityVal = timeSelect.value || 'Not specified';
+    const foodVal = chosenVibe || 'Not specified';
+
+    await sendTelegramNotification(formattedDate, timeVal, activityVal, foodVal);
+
     setTimeout(() => {
       goTo('step-final');
       launchConfetti();
@@ -521,7 +576,7 @@
     }
   }
 
-  // ---- ambient falling petals ----
+  // ---- Ambient falling petals ----
   function spawnPetal() {
     const p = document.createElement('div');
     p.className = 'petal';
