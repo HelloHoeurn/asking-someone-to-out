@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>តើអូនចង់ទៅញ៉ាំអី/ដើរលេងជាមួយបងទេ? ❤️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kantumruy Pro', 'Khmer OS Battambang', sans-serif;
+        }
+
+        body {
+            background-color: #ffe6e8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.2);
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .option-card {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 2px solid #ffccd5;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-card:hover {
+            border-color: #ff4d6d;
+            background-color: #fff0f3;
+        }
+
+        .option-card input {
+            margin-right: 12px;
+            accent-color: #ff4d6d;
+            transform: scale(1.2);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            min-height: 50px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-yes {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn-yes:hover {
+            background-color: #ff2a54;
+            transform: scale(1.05);
+        }
+
+        .btn-no {
+            background-color: #cccccc;
+            color: #333;
+            position: absolute;
+        }
+
+        .success-message {
+            display: none;
+            color: #ff4d6d;
+            font-size: 1.3rem;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div id="quiz-container">
+            <h1>តើចុងសប្តាហ៍នេះចង់ទៅណានឹងបង? 💖</h1>
+            <p>សូមជ្រើសរើសសកម្មភាពដែលអូនចូលចិត្ត៖</p>
+
+            <div class="options">
+                <label class="option-card">
+                    <input type="radio" name="activity" value="មើលកុន (Movie Date)" checked>
+                    <span>🎬 មើលកុន (Movie Date)</span>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="activity" value="មើលថ្ងៃលិច (Sunset Date)">
+                    <span>🌅 មើលថ្ងៃលិច (Sunset Date)</span>
+                </label>
+            </div>
+
+            <div class="btn-group" id="button-area">
+                <button class="btn-yes" id="yesBtn">យល់ព្រម! 🥰</button>
+                <button class="btn-no" id="noBtn">អត់ទេ 😜</button>
+            </div>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <h2>អរគុណច្រើនអូនសំឡាញ់! 🎉</h2>
+            <p style="margin-top: 10px;">បងបានទទួលចម្លើយហើយ ចាំជួបគ្នានៅថ្ងៃណាត់ជួប! ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. TELEGRAM BOT CONFIGURATION
+        // ==========================================
+        const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';
+        const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID_HERE';
+
+        async function sendTelegramNotification(activityChoice) {
+            const message = `💖 **Date Proposal Accepted!** 💖\n\nChosen Activity: **${activityChoice}**`;
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+            } catch (error) {
+                console.error("Error sending message to Telegram:", error);
+            }
+        }
+
+        // ==========================================
+        // 2. RUNAWAY "NO" BUTTON LOGIC
+        // ==========================================
+        const noBtn = document.getElementById('noBtn');
+        const container = document.getElementById('button-area');
+
+        function moveNoButton() {
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+
+            // Calculate max available movement area inside/around button group
+            const maxX = 150;
+            const maxY = 100;
+
+            const randomX = (Math.random() - 0.5) * maxX * 2;
+            const randomY = (Math.random() - 0.5) * maxY * 2;
+
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', moveNoButton); // Mobile support
+
+        // ==========================================
+        // 3. SUBMIT / YES BUTTON CLICK HANDLER
+        // ==========================================
+        const yesBtn = document.getElementById('yesBtn');
+        const quizContainer = document.getElementById('quiz-container');
+        const successMessage = document.getElementById('successMessage');
+
+        yesBtn.addEventListener('click', async () => {
+            const selectedOption = document.querySelector('input[name="activity"]:checked').value;
+
+            // Send notification to Telegram
+            await sendTelegramNotification(selectedOption);
+
+            // Switch to success view
+            quizContainer.style.display = 'none';
+            successMessage.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
